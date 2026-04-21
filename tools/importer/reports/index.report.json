@@ -1,0 +1,14 @@
+{
+  "status": "success",
+  "url": "https://www.greatlocalpubs.co.uk/",
+  "path": "index",
+  "timestamp": "2026-04-21T11:58:30.091Z",
+  "title": "Find Great Local Pubs | Proper Pub Food & Drink",
+  "template": "homepage",
+  "blocks": [
+    "hero",
+    "cards",
+    "columns",
+    "columns"
+  ]
+}

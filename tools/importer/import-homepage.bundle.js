@@ -41,170 +41,108 @@ var CustomImportScript = (() => {
   });
 
   // tools/importer/parsers/hero.js
-  function parse(element, { document: document2 }) {
+  function parse(element, { document }) {
     const heading = element.querySelector("h1");
-    const imgs = element.querySelectorAll("img");
-    let heroImg = null;
-    for (const img of imgs) {
-      const src = img.getAttribute("src");
-      if (src && src.length > 0) {
-        heroImg = img;
-        break;
-      }
-    }
+    const img = element.querySelector("picture img[src], img[src]");
     const cells = [];
-    if (heroImg) {
-      cells.push([heroImg]);
+    if (img) {
+      cells.push([img]);
     }
     if (heading) {
       cells.push([heading]);
     }
-    const block = WebImporter.Blocks.createBlock(document2, {
+    const block = WebImporter.Blocks.createBlock(document, {
       name: "hero",
       cells
     });
     element.replaceWith(block);
   }
 
-  // tools/importer/parsers/job-search.js
-  function parse2(element, { document: document2 }) {
-    const searchButton = element.querySelector('#search-vacancies, button[id*="search"]');
-    const radiusButton = element.querySelector("talos-select span, button span");
-    const input = element.querySelector('input[type="search"], input[id]');
-    const cells = [];
-    const placeholder = input ? input.getAttribute("placeholder") || "Search for a job..." : "Search for a job...";
-    cells.push(["placeholder", placeholder]);
-    const radius = radiusButton ? radiusButton.textContent.trim() : "10 miles";
-    cells.push(["radius", radius]);
-    const buttonText = searchButton ? searchButton.textContent.trim().replace(/\s+/g, " ") : "Search";
-    cells.push(["button", buttonText]);
-    cells.push(["action", "/vacancies"]);
-    const block = WebImporter.Blocks.createBlock(document2, {
-      name: "job-search",
-      cells
-    });
-    element.replaceWith(block);
-  }
-
-  // tools/importer/parsers/columns.js
-  function parse3(element, { document: document2 }) {
-    const heading = element.querySelector("h2");
-    const textContainer = element.querySelector(".tablet\\:w-2\\/3, .tablet\\:p-0");
-    const paragraphs = textContainer ? textContainer.querySelectorAll("p.ql-align-center, p:not(.INHERIT):not(.DEFAULT-UL)") : element.querySelectorAll("p");
-    const img = element.querySelector('talos-carousel img[src], img[src*="images"]');
-    const textCol = document2.createElement("div");
-    if (heading) {
-      const h = document2.createElement("h2");
-      h.textContent = heading.textContent.trim();
-      textCol.append(h);
-    }
-    const richTextEl = textContainer ? textContainer.querySelector(".INHERIT") : null;
-    if (richTextEl) {
-      const innerPs = richTextEl.querySelectorAll("p");
-      innerPs.forEach((p) => {
-        const text = p.textContent.trim();
-        if (text && text !== "") {
-          const para = document2.createElement("p");
-          para.textContent = text;
-          textCol.append(para);
-        }
-      });
-    }
-    const imgCol = document2.createElement("div");
-    if (img) {
-      const imgEl = document2.createElement("img");
-      imgEl.setAttribute("src", img.getAttribute("src"));
-      imgEl.setAttribute("alt", img.getAttribute("alt") || "Section image");
-      imgCol.append(imgEl);
-    }
-    const cells = [];
-    cells.push([textCol, imgCol]);
-    const block = WebImporter.Blocks.createBlock(document2, {
-      name: "columns",
-      cells
-    });
-    element.replaceWith(block);
-  }
-
-  // tools/importer/parsers/carousel.js
-  function parse4(element, { document: document2 }) {
-    const innerPs = element.querySelectorAll(".INHERIT div p, .INHERIT p");
-    let quoteText = "";
-    for (const p of innerPs) {
-      const text = p.textContent.trim();
-      if (text && text.startsWith('"')) {
-        quoteText = text;
-        break;
-      }
-    }
-    if (!quoteText) {
-      const fallback = element.querySelector(".min-h-180 p, .min-h-80 p");
-      if (fallback) quoteText = fallback.textContent.trim();
-    }
-    const attributionEls = element.querySelectorAll("p.text-4.leading-25.text-center");
-    let attribution = "";
-    for (const el of attributionEls) {
-      const text = el.textContent.trim();
-      if (text && text !== quoteText) {
-        attribution = text;
-        break;
-      }
-    }
-    const cells = [];
-    const quoteEl = document2.createElement("p");
-    quoteEl.textContent = quoteText;
-    const attrEl = document2.createElement("p");
-    attrEl.textContent = attribution;
-    cells.push([quoteEl, attrEl]);
-    const block = WebImporter.Blocks.createBlock(document2, {
-      name: "carousel",
-      cells
-    });
-    element.replaceWith(block);
-  }
-
   // tools/importer/parsers/cards.js
-  function parse5(element, { document: document2 }) {
-    const tiles = element.querySelectorAll(".bg-light.rounded-base, .bg-light.self-stretch");
+  function parse2(element, { document }) {
+    const articles = element.querySelectorAll(".column-article");
     const cells = [];
-    tiles.forEach((tile) => {
-      const img = tile.querySelector("img[src]:not(.invisible)");
-      const title = tile.querySelector("p.font-semibold");
-      const descContainer = tile.querySelector(".INHERIT");
-      const descPs = descContainer ? descContainer.querySelectorAll("p") : [];
-      let descText = "";
-      descPs.forEach((p) => {
-        const text = p.textContent.trim();
-        if (text) descText += text;
-      });
-      const imgCol = document2.createElement("div");
+    articles.forEach((article) => {
+      const img = article.querySelector("picture img[src], img[src]");
+      const heading = article.querySelector("h3, h2");
+      const desc = article.querySelector(".column-article-inside .size-2");
+      const cta = article.querySelector(".column-article-cta-central a, a.button");
+      const imgCol = document.createElement("div");
       if (img) {
-        const imgEl = document2.createElement("img");
-        imgEl.setAttribute("src", img.getAttribute("src"));
-        imgEl.setAttribute("alt", img.getAttribute("alt") || "");
-        imgCol.append(imgEl);
+        imgCol.append(img);
       }
-      const textCol = document2.createElement("div");
-      if (title) {
-        const h = document2.createElement("p");
-        h.innerHTML = `<strong>${title.textContent.trim()}</strong>`;
+      const textCol = document.createElement("div");
+      if (heading) {
+        const h = document.createElement("p");
+        h.innerHTML = "<strong>" + heading.textContent.trim() + "</strong>";
         textCol.append(h);
       }
-      if (descText) {
-        const p = document2.createElement("p");
-        p.textContent = descText;
+      if (desc) {
+        const p = document.createElement("p");
+        p.textContent = desc.textContent.trim();
         textCol.append(p);
+      }
+      if (cta) {
+        const link = document.createElement("p");
+        const a = document.createElement("a");
+        a.href = cta.href;
+        a.textContent = cta.textContent.trim();
+        link.append(a);
+        textCol.append(link);
       }
       cells.push([imgCol, textCol]);
     });
-    const block = WebImporter.Blocks.createBlock(document2, {
+    const block = WebImporter.Blocks.createBlock(document, {
       name: "cards",
       cells
     });
     element.replaceWith(block);
   }
 
-  // tools/importer/transformers/slugandlettuce-cleanup.js
+  // tools/importer/parsers/columns.js
+  function parse3(element, { document }) {
+    const imgContainer = element.querySelector(".grid-image");
+    const textContainer = element.querySelector(".grid-article-content-inner");
+    const img = imgContainer ? imgContainer.querySelector("picture img[src], img[src]") : null;
+    const heading = textContainer ? textContainer.querySelector("h2, h3") : null;
+    const paragraphs = textContainer ? textContainer.querySelectorAll("p.size-2") : [];
+    const cta = textContainer ? textContainer.querySelector("a.button") : null;
+    const imgCol = document.createElement("div");
+    if (img) {
+      imgCol.append(img);
+    }
+    const textCol = document.createElement("div");
+    if (heading) {
+      const h = document.createElement("h3");
+      h.textContent = heading.textContent.trim();
+      textCol.append(h);
+    }
+    paragraphs.forEach((p) => {
+      const text = p.textContent.trim();
+      if (text && !p.querySelector("a.button")) {
+        const para = document.createElement("p");
+        para.textContent = text;
+        textCol.append(para);
+      }
+    });
+    if (cta) {
+      const link = document.createElement("p");
+      const a = document.createElement("a");
+      a.href = cta.href;
+      a.textContent = cta.textContent.trim();
+      link.append(a);
+      textCol.append(link);
+    }
+    const isAlternate = element.classList.contains("alternate");
+    const cells = isAlternate ? [[textCol, imgCol]] : [[imgCol, textCol]];
+    const block = WebImporter.Blocks.createBlock(document, {
+      name: "columns",
+      cells
+    });
+    element.replaceWith(block);
+  }
+
+  // tools/importer/transformers/greatlocalpubs-cleanup.js
   var TransformHook = { beforeTransform: "beforeTransform", afterTransform: "afterTransform" };
   function transform(hookName, element, payload) {
     if (hookName === TransformHook.beforeTransform) {
@@ -214,37 +152,53 @@ var CustomImportScript = (() => {
         ".onetrust-pc-dark-filter",
         '[class*="onetrust"]'
       ]);
-      const comments = [];
-      const walker = document.createTreeWalker(element, NodeFilter.SHOW_COMMENT);
-      while (walker.nextNode()) comments.push(walker.currentNode);
-      comments.forEach((c) => c.remove());
       WebImporter.DOMUtils.remove(element, [
-        ".cdk-visually-hidden",
-        '[class*="hidden"]',
-        "img.invisible"
+        ".mob-menu"
+      ]);
+      WebImporter.DOMUtils.remove(element, [
+        ".dummy-content-wrapper",
+        "#rootLocationLoader"
+      ]);
+      WebImporter.DOMUtils.remove(element, [
+        ".search-location-result.root-search-location-result",
+        "#map_canvas"
+      ]);
+      WebImporter.DOMUtils.remove(element, [
+        "#locationSiteSelector",
+        ".cms-176021"
       ]);
     }
     if (hookName === TransformHook.afterTransform) {
       WebImporter.DOMUtils.remove(element, [
-        "navbar-section",
-        "nav",
+        ".header-container",
+        ".header-top",
+        "#footer",
+        ".footer-root",
         "footer",
-        '[role="contentinfo"]',
-        "router-outlet",
+        "nav",
+        ".ma5menu",
+        ".mob-nav",
+        "#js-ma5menu",
+        ".smartApp-container",
+        ".gold-rule",
         "noscript",
         "link",
-        "iframe"
+        "iframe",
+        "select",
+        "input",
+        ".search-location-result",
+        ".root-home-location-search"
       ]);
     }
   }
 
-  // tools/importer/transformers/slugandlettuce-sections.js
+  // tools/importer/transformers/greatlocalpubs-sections.js
   var TransformHook2 = { beforeTransform: "beforeTransform", afterTransform: "afterTransform" };
   function transform2(hookName, element, payload) {
     if (hookName === TransformHook2.afterTransform) {
       const { template } = payload;
       if (!template || !template.sections || template.sections.length < 2) return;
-      const document2 = element.ownerDocument;
+      const document = element.ownerDocument;
       const sections = template.sections;
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
@@ -256,14 +210,14 @@ var CustomImportScript = (() => {
         }
         if (!sectionEl) continue;
         if (section.style) {
-          const metaBlock = WebImporter.Blocks.createBlock(document2, {
+          const metaBlock = WebImporter.Blocks.createBlock(document, {
             name: "Section Metadata",
             cells: { style: section.style }
           });
           sectionEl.after(metaBlock);
         }
         if (i > 0) {
-          const hr = document2.createElement("hr");
+          const hr = document.createElement("hr");
           sectionEl.before(hr);
         }
       }
@@ -273,102 +227,24 @@ var CustomImportScript = (() => {
   // tools/importer/import-homepage.js
   var parsers = {
     "hero": parse,
-    "job-search": parse2,
-    "columns": parse3,
-    "carousel": parse4,
-    "cards": parse5
+    "cards": parse2,
+    "columns": parse3
   };
   var PAGE_TEMPLATE = {
     name: "homepage",
-    description: "Main careers landing page with hero banner, job search widget, brand values, testimonials carousel, and benefits cards",
-    urls: ["https://careers.slugandlettuce.co.uk/"],
+    description: "Great Local Pubs main landing page",
+    urls: ["https://www.greatlocalpubs.co.uk/"],
     blocks: [
-      {
-        name: "hero",
-        instances: ["header-section"]
-      },
-      {
-        name: "job-search",
-        instances: ["vacancies-section-filters"]
-      },
-      {
-        name: "columns",
-        instances: ["text-and-media-section"]
-      },
-      {
-        name: "carousel",
-        instances: ["quotes-section"]
-      },
-      {
-        name: "cards",
-        instances: ["text-and-media-tiles-section"]
-      }
+      { name: "hero", instances: [".home-banner.banner-wrapper"] },
+      { name: "cards", instances: [".column-articles"] },
+      { name: "columns", instances: [".cms-176022 .two-col-image-grid", ".cms-176017 .two-col-image-grid"] }
     ],
     sections: [
-      {
-        id: "section-1",
-        name: "Hero Banner",
-        selector: "header-section",
-        style: null,
-        blocks: ["hero"],
-        defaultContent: []
-      },
-      {
-        id: "section-2",
-        name: "Job Search",
-        selector: "vacancies-section-filters",
-        style: "light",
-        blocks: ["job-search"],
-        defaultContent: []
-      },
-      {
-        id: "section-3",
-        name: "Brand Values",
-        selector: ["text-section:first-of-type"],
-        style: null,
-        blocks: [],
-        defaultContent: [
-          "text-section:first-of-type h2",
-          "text-section:first-of-type p",
-          "text-section:first-of-type call-to-action-button"
-        ]
-      },
-      {
-        id: "section-4",
-        name: "What We're All About",
-        selector: "text-and-media-section",
-        style: null,
-        blocks: ["columns"],
-        defaultContent: []
-      },
-      {
-        id: "section-5",
-        name: "What We're Looking For",
-        selector: ["text-section:last-of-type"],
-        style: null,
-        blocks: [],
-        defaultContent: [
-          "text-section:last-of-type h2",
-          "text-section:last-of-type p",
-          "text-section:last-of-type call-to-action-button"
-        ]
-      },
-      {
-        id: "section-6",
-        name: "Testimonials",
-        selector: "quotes-section",
-        style: null,
-        blocks: ["carousel"],
-        defaultContent: []
-      },
-      {
-        id: "section-7",
-        name: "Benefits",
-        selector: "text-and-media-tiles-section",
-        style: null,
-        blocks: ["cards"],
-        defaultContent: ["text-and-media-tiles-section h2"]
-      }
+      { id: "section-1", name: "Hero Banner", selector: ".home-banner.banner-wrapper", style: null, blocks: ["hero"], defaultContent: [] },
+      { id: "section-2", name: "Intro Text", selector: ".cms-176015 .article-wrapper", style: null, blocks: [], defaultContent: [".article-inner h1", ".article-inner p"] },
+      { id: "section-3", name: "Three Column Cards", selector: ".column-articles", style: "light", blocks: ["cards"], defaultContent: [] },
+      { id: "section-4", name: "Gift Cards", selector: ".cms-176022 .two-col-image-grid", style: null, blocks: ["columns"], defaultContent: [] },
+      { id: "section-5", name: "Newsletter Signup", selector: ".cms-176017 .two-col-image-grid", style: null, blocks: ["columns"], defaultContent: [] }
     ]
   };
   var transformers = [
@@ -376,32 +252,22 @@ var CustomImportScript = (() => {
     ...PAGE_TEMPLATE.sections && PAGE_TEMPLATE.sections.length > 1 ? [transform2] : []
   ];
   function executeTransformers(hookName, element, payload) {
-    const enhancedPayload = __spreadProps(__spreadValues({}, payload), {
-      template: PAGE_TEMPLATE
-    });
-    transformers.forEach((transformerFn) => {
+    const enhancedPayload = __spreadProps(__spreadValues({}, payload), { template: PAGE_TEMPLATE });
+    transformers.forEach((fn) => {
       try {
-        transformerFn.call(null, hookName, element, enhancedPayload);
+        fn.call(null, hookName, element, enhancedPayload);
       } catch (e) {
         console.error(`Transformer failed at ${hookName}:`, e);
       }
     });
   }
-  function findBlocksOnPage(document2, template) {
+  function findBlocksOnPage(document, template) {
     const pageBlocks = [];
     template.blocks.forEach((blockDef) => {
       blockDef.instances.forEach((selector) => {
-        const elements = document2.querySelectorAll(selector);
-        if (elements.length === 0) {
-          console.warn(`Block "${blockDef.name}" selector not found: ${selector}`);
-        }
+        const elements = document.querySelectorAll(selector);
         elements.forEach((element) => {
-          pageBlocks.push({
-            name: blockDef.name,
-            selector,
-            element,
-            section: blockDef.section || null
-          });
+          pageBlocks.push({ name: blockDef.name, selector, element, section: blockDef.section || null });
         });
       });
     });
@@ -410,40 +276,30 @@ var CustomImportScript = (() => {
   }
   var import_homepage_default = {
     transform: (payload) => {
-      const { document: document2, url, html, params } = payload;
-      const main = document2.body;
+      const { document, url, html, params } = payload;
+      const main = document.body;
       executeTransformers("beforeTransform", main, payload);
-      const pageBlocks = findBlocksOnPage(document2, PAGE_TEMPLATE);
+      const pageBlocks = findBlocksOnPage(document, PAGE_TEMPLATE);
       pageBlocks.forEach((block) => {
         const parser = parsers[block.name];
         if (parser) {
           try {
-            parser(block.element, { document: document2, url, params });
+            parser(block.element, { document, url, params });
           } catch (e) {
-            console.error(`Failed to parse ${block.name} (${block.selector}):`, e);
+            console.error(`Failed to parse ${block.name}:`, e);
           }
-        } else {
-          console.warn(`No parser found for block: ${block.name}`);
         }
       });
       executeTransformers("afterTransform", main, payload);
-      const hr = document2.createElement("hr");
+      const hr = document.createElement("hr");
       main.appendChild(hr);
-      WebImporter.rules.createMetadata(main, document2);
-      WebImporter.rules.transformBackgroundImages(main, document2);
+      WebImporter.rules.createMetadata(main, document);
+      WebImporter.rules.transformBackgroundImages(main, document);
       WebImporter.rules.adjustImageUrls(main, url, params.originalURL);
       const path = WebImporter.FileUtils.sanitizePath(
         new URL(params.originalURL).pathname.replace(/\/$/, "").replace(/\.html$/, "") || "/index"
       );
-      return [{
-        element: main,
-        path,
-        report: {
-          title: document2.title,
-          template: PAGE_TEMPLATE.name,
-          blocks: pageBlocks.map((b) => b.name)
-        }
-      }];
+      return [{ element: main, path, report: { title: document.title, template: PAGE_TEMPLATE.name, blocks: pageBlocks.map((b) => b.name) } }];
     }
   };
   return __toCommonJS(import_homepage_exports);

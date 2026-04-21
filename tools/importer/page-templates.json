@@ -2,140 +2,20 @@
   "templates": [
     {
       "name": "homepage",
-      "urls": [
-        "https://careers.slugandlettuce.co.uk/"
-      ],
-      "description": "Main careers landing page with hero banner, job search widget, brand values, testimonials carousel, and benefits cards",
+      "urls": ["https://www.greatlocalpubs.co.uk/"],
+      "description": "Great Local Pubs main landing page",
       "blocks": [
-        {
-          "name": "hero",
-          "instances": [
-            "header-section"
-          ]
-        },
-        {
-          "name": "job-search",
-          "instances": [
-            "vacancies-section-filters"
-          ]
-        },
-        {
-          "name": "columns",
-          "instances": [
-            "text-and-media-section"
-          ]
-        },
-        {
-          "name": "carousel",
-          "instances": [
-            "quotes-section"
-          ]
-        },
-        {
-          "name": "cards",
-          "instances": [
-            "text-and-media-tiles-section"
-          ]
-        }
+        {"name": "hero", "instances": [".home-banner.banner-wrapper"]},
+        {"name": "cards", "instances": [".column-articles"]},
+        {"name": "columns", "instances": [".cms-176022 .two-col-image-grid", ".cms-176017 .two-col-image-grid"]}
       ],
       "sections": [
-        {
-          "id": "section-1",
-          "name": "Hero Banner",
-          "selector": "header-section",
-          "style": null,
-          "blocks": [
-            "hero"
-          ],
-          "defaultContent": []
-        },
-        {
-          "id": "section-2",
-          "name": "Job Search",
-          "selector": "vacancies-section-filters",
-          "style": "light",
-          "blocks": [
-            "job-search"
-          ],
-          "defaultContent": []
-        },
-        {
-          "id": "section-3",
-          "name": "Brand Values",
-          "selector": [
-            "text-section:first-of-type"
-          ],
-          "style": null,
-          "blocks": [],
-          "defaultContent": [
-            "text-section:first-of-type h2",
-            "text-section:first-of-type p",
-            "text-section:first-of-type call-to-action-button"
-          ]
-        },
-        {
-          "id": "section-4",
-          "name": "What We're All About",
-          "selector": "text-and-media-section",
-          "style": null,
-          "blocks": [
-            "columns"
-          ],
-          "defaultContent": []
-        },
-        {
-          "id": "section-5",
-          "name": "What We're Looking For",
-          "selector": [
-            "text-section:last-of-type"
-          ],
-          "style": null,
-          "blocks": [],
-          "defaultContent": [
-            "text-section:last-of-type h2",
-            "text-section:last-of-type p",
-            "text-section:last-of-type call-to-action-button"
-          ]
-        },
-        {
-          "id": "section-6",
-          "name": "Testimonials",
-          "selector": "quotes-section",
-          "style": null,
-          "blocks": [
-            "carousel"
-          ],
-          "defaultContent": []
-        },
-        {
-          "id": "section-7",
-          "name": "Benefits",
-          "selector": "text-and-media-tiles-section",
-          "style": null,
-          "blocks": [
-            "cards"
-          ],
-          "defaultContent": [
-            "text-and-media-tiles-section h2"
-          ]
-        }
+        {"id": "section-1", "name": "Hero Banner", "selector": ".home-banner.banner-wrapper", "style": null, "blocks": ["hero"], "defaultContent": []},
+        {"id": "section-2", "name": "Intro Text", "selector": ".cms-176015 .article-wrapper", "style": null, "blocks": [], "defaultContent": [".article-inner h1", ".article-inner p"]},
+        {"id": "section-3", "name": "Three Column Cards", "selector": ".column-articles", "style": "light", "blocks": ["cards"], "defaultContent": []},
+        {"id": "section-4", "name": "Gift Cards", "selector": ".cms-176022 .two-col-image-grid", "style": null, "blocks": ["columns"], "defaultContent": []},
+        {"id": "section-5", "name": "Newsletter Signup", "selector": ".cms-176017 .two-col-image-grid", "style": null, "blocks": ["columns"], "defaultContent": []}
       ]
-    },
-    {
-      "name": "privacy-policy",
-      "urls": [
-        "https://careers.slugandlettuce.co.uk/privacy-policy"
-      ],
-      "description": "Static privacy policy page with hero banner and numbered policy sections",
-      "blocks": []
-    },
-    {
-      "name": "vacancies",
-      "urls": [
-        "https://careers.slugandlettuce.co.uk/vacancies"
-      ],
-      "description": "Dynamic job listings page with search filters and paginated vacancy cards",
-      "blocks": []
     }
   ]
 }

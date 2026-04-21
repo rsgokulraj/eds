@@ -2,54 +2,49 @@
 /* global WebImporter */
 
 // Block: columns
-// Source: text-and-media-section (two-column layout: text + image)
-// URL: https://careers.slugandlettuce.co.uk/
+// Source: .two-col-image-grid (two-column layout with image and text)
+// URL: https://www.greatlocalpubs.co.uk/
 
 export default function parse(element, { document }) {
-  // Extract text content (left side)
-  const heading = element.querySelector('h2');
-  const textContainer = element.querySelector('.tablet\\:w-2\\/3, .tablet\\:p-0');
-  const paragraphs = textContainer
-    ? textContainer.querySelectorAll('p.ql-align-center, p:not(.INHERIT):not(.DEFAULT-UL)')
-    : element.querySelectorAll('p');
+  const imgContainer = element.querySelector('.grid-image');
+  const textContainer = element.querySelector('.grid-article-content-inner');
 
-  // Extract image (right side)
-  const img = element.querySelector('talos-carousel img[src], img[src*="images"]');
+  const img = imgContainer ? imgContainer.querySelector('picture img[src], img[src]') : null;
+  const heading = textContainer ? textContainer.querySelector('h2, h3') : null;
+  const paragraphs = textContainer ? textContainer.querySelectorAll('p.size-2') : [];
+  const cta = textContainer ? textContainer.querySelector('a.button') : null;
 
-  // Build text column content
+  const imgCol = document.createElement('div');
+  if (img) {
+    imgCol.append(img);
+  }
+
   const textCol = document.createElement('div');
   if (heading) {
-    const h = document.createElement('h2');
+    const h = document.createElement('h3');
     h.textContent = heading.textContent.trim();
     textCol.append(h);
   }
-
-  // Get the rich text content
-  const richTextEl = textContainer ? textContainer.querySelector('.INHERIT') : null;
-  if (richTextEl) {
-    const innerPs = richTextEl.querySelectorAll('p');
-    innerPs.forEach((p) => {
-      const text = p.textContent.trim();
-      if (text && text !== '') {
-        const para = document.createElement('p');
-        para.textContent = text;
-        textCol.append(para);
-      }
-    });
+  paragraphs.forEach((p) => {
+    const text = p.textContent.trim();
+    if (text && !p.querySelector('a.button')) {
+      const para = document.createElement('p');
+      para.textContent = text;
+      textCol.append(para);
+    }
+  });
+  if (cta) {
+    const link = document.createElement('p');
+    const a = document.createElement('a');
+    a.href = cta.href;
+    a.textContent = cta.textContent.trim();
+    link.append(a);
+    textCol.append(link);
   }
 
-  // Build image column content
-  const imgCol = document.createElement('div');
-  if (img) {
-    const imgEl = document.createElement('img');
-    imgEl.setAttribute('src', img.getAttribute('src'));
-    imgEl.setAttribute('alt', img.getAttribute('alt') || 'Section image');
-    imgCol.append(imgEl);
-  }
-
-  const cells = [];
-  // Single row with two columns: text | image
-  cells.push([textCol, imgCol]);
+  // Check if image is on left or right (alternate class means image is on right)
+  const isAlternate = element.classList.contains('alternate');
+  const cells = isAlternate ? [[textCol, imgCol]] : [[imgCol, textCol]];
 
   const block = WebImporter.Blocks.createBlock(document, {
     name: 'columns',

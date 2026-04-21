@@ -2,50 +2,43 @@
 /* global WebImporter */
 
 // Block: cards
-// Source: text-and-media-tiles-section (3 benefit cards with icon, title, description)
-// URL: https://careers.slugandlettuce.co.uk/
+// Source: .column-articles (3 feature cards with image, heading, text, CTA)
+// URL: https://www.greatlocalpubs.co.uk/
 
 export default function parse(element, { document }) {
-  // Find all card tiles
-  const tiles = element.querySelectorAll('.bg-light.rounded-base, .bg-light.self-stretch');
+  const articles = element.querySelectorAll('.column-article');
 
   const cells = [];
 
-  tiles.forEach((tile) => {
-    // Extract card image
-    const img = tile.querySelector('img[src]:not(.invisible)');
+  articles.forEach((article) => {
+    const img = article.querySelector('picture img[src], img[src]');
+    const heading = article.querySelector('h3, h2');
+    const desc = article.querySelector('.column-article-inside .size-2');
+    const cta = article.querySelector('.column-article-cta-central a, a.button');
 
-    // Extract card title
-    const title = tile.querySelector('p.font-semibold');
-
-    // Extract card description
-    const descContainer = tile.querySelector('.INHERIT');
-    const descPs = descContainer ? descContainer.querySelectorAll('p') : [];
-    let descText = '';
-    descPs.forEach((p) => {
-      const text = p.textContent.trim();
-      if (text) descText += text;
-    });
-
-    // Build card row: image | text content
     const imgCol = document.createElement('div');
     if (img) {
-      const imgEl = document.createElement('img');
-      imgEl.setAttribute('src', img.getAttribute('src'));
-      imgEl.setAttribute('alt', img.getAttribute('alt') || '');
-      imgCol.append(imgEl);
+      imgCol.append(img);
     }
 
     const textCol = document.createElement('div');
-    if (title) {
+    if (heading) {
       const h = document.createElement('p');
-      h.innerHTML = `<strong>${title.textContent.trim()}</strong>`;
+      h.innerHTML = '<strong>' + heading.textContent.trim() + '</strong>';
       textCol.append(h);
     }
-    if (descText) {
+    if (desc) {
       const p = document.createElement('p');
-      p.textContent = descText;
+      p.textContent = desc.textContent.trim();
       textCol.append(p);
+    }
+    if (cta) {
+      const link = document.createElement('p');
+      const a = document.createElement('a');
+      a.href = cta.href;
+      a.textContent = cta.textContent.trim();
+      link.append(a);
+      textCol.append(link);
     }
 
     cells.push([imgCol, textCol]);
