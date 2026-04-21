@@ -1,0 +1,74 @@
+.carousel {
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.carousel .carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.carousel .carousel-prev,
+.carousel .carousel-next {
+  background: none;
+  border: 2px solid var(--dark-color);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.carousel .carousel-prev:hover,
+.carousel .carousel-next:hover {
+  background-color: var(--dark-color);
+  color: white;
+}
+
+.carousel .carousel-slides {
+  flex: 1;
+  min-width: 0;
+}
+
+.carousel .carousel-quote {
+  font-size: var(--body-font-size-m);
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0 0 16px;
+  padding: 0;
+  border: none;
+}
+
+.carousel .carousel-quote::before {
+  content: '\201C';
+}
+
+.carousel .carousel-quote::after {
+  content: '\201D';
+}
+
+.carousel .carousel-attribution {
+  font-size: var(--body-font-size-s);
+  font-weight: 600;
+  color: var(--dark-color);
+  margin: 0;
+}
+
+@media (width < 600px) {
+  .carousel .carousel-prev,
+  .carousel .carousel-next {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+}

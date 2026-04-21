@@ -1,0 +1,141 @@
+{
+  "templates": [
+    {
+      "name": "homepage",
+      "urls": [
+        "https://careers.slugandlettuce.co.uk/"
+      ],
+      "description": "Main careers landing page with hero banner, job search widget, brand values, testimonials carousel, and benefits cards",
+      "blocks": [
+        {
+          "name": "hero",
+          "instances": [
+            "header-section"
+          ]
+        },
+        {
+          "name": "job-search",
+          "instances": [
+            "vacancies-section-filters"
+          ]
+        },
+        {
+          "name": "columns",
+          "instances": [
+            "text-and-media-section"
+          ]
+        },
+        {
+          "name": "carousel",
+          "instances": [
+            "quotes-section"
+          ]
+        },
+        {
+          "name": "cards",
+          "instances": [
+            "text-and-media-tiles-section"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Hero Banner",
+          "selector": "header-section",
+          "style": null,
+          "blocks": [
+            "hero"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-2",
+          "name": "Job Search",
+          "selector": "vacancies-section-filters",
+          "style": "light",
+          "blocks": [
+            "job-search"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-3",
+          "name": "Brand Values",
+          "selector": [
+            "text-section:first-of-type"
+          ],
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "text-section:first-of-type h2",
+            "text-section:first-of-type p",
+            "text-section:first-of-type call-to-action-button"
+          ]
+        },
+        {
+          "id": "section-4",
+          "name": "What We're All About",
+          "selector": "text-and-media-section",
+          "style": null,
+          "blocks": [
+            "columns"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-5",
+          "name": "What We're Looking For",
+          "selector": [
+            "text-section:last-of-type"
+          ],
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "text-section:last-of-type h2",
+            "text-section:last-of-type p",
+            "text-section:last-of-type call-to-action-button"
+          ]
+        },
+        {
+          "id": "section-6",
+          "name": "Testimonials",
+          "selector": "quotes-section",
+          "style": null,
+          "blocks": [
+            "carousel"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-7",
+          "name": "Benefits",
+          "selector": "text-and-media-tiles-section",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": [
+            "text-and-media-tiles-section h2"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "privacy-policy",
+      "urls": [
+        "https://careers.slugandlettuce.co.uk/privacy-policy"
+      ],
+      "description": "Static privacy policy page with hero banner and numbered policy sections",
+      "blocks": []
+    },
+    {
+      "name": "vacancies",
+      "urls": [
+        "https://careers.slugandlettuce.co.uk/vacancies"
+      ],
+      "description": "Dynamic job listings page with search filters and paginated vacancy cards",
+      "blocks": []
+    }
+  ]
+}
